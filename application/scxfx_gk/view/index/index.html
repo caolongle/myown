@@ -1,0 +1,103 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<include file="../application/scxfx_gk/view/common/header.html" />
+</head>
+<include file="../application/scxfx_gk/view/common/body.html" />
+							<div class="col-xs-12">
+								<!-- PAGE CONTENT BEGINS -->
+
+								<div class="alert alert-block alert-success">
+									<button type="button" class="close" data-dismiss="alert">
+										<i class="icon-remove"></i>
+									</button>
+
+									<i class="icon-ok green"></i>
+
+									欢迎使用
+									<strong class="green">
+										新方向挂靠CRM系统
+										<small></small>
+									</strong>
+									,祝你天天签单！
+								</div>
+								
+								<!-- PAGE CONTENT ENDS -->
+							</div><!-- /.col -->
+						<!-- /.row -->
+						<div style="text-align: center;margin-top: 16%;"><h1>欢迎使用新方向挂靠CRM系统！</h1></div>
+					</div><!-- /.page-content -->
+				</div><!-- /.main-content -->
+
+		</div><!-- /.main-container -->
+
+		<!-- basic scripts -->
+
+		<!-- page specific plugin scripts -->
+		<include file="../application/scxfx_gk/view/common/resource.html" />
+		<!--[if lte IE 8]>
+		  <script src="__PUBLIC__assets/js/excanvas.min.js"></script>
+		<![endif]-->
+
+		<script src="__PUBLIC__assets/js/jquery-ui-1.10.3.custom.min.js"></script>
+		<script src="__PUBLIC__assets/js/jquery.ui.touch-punch.min.js"></script>
+		<script src="__PUBLIC__assets/js/jquery.slimscroll.min.js"></script>
+		<script src="__PUBLIC__assets/js/jquery.easy-pie-chart.min.js"></script>
+		<script src="__PUBLIC__assets/js/jquery.sparkline.min.js"></script>
+		<script src="__PUBLIC__assets/js/flot/jquery.flot.min.js"></script>
+		<script src="__PUBLIC__assets/js/flot/jquery.flot.pie.min.js"></script>
+		<script src="__PUBLIC__assets/js/flot/jquery.flot.resize.min.js"></script>
+		<script type="text/javascript">
+			jQuery(function($) {
+				$('#recent-box [data-rel="tooltip"]').tooltip({placement: tooltip_placement});
+				function tooltip_placement(context, source) {
+					var $source = $(source);
+					var $parent = $source.closest('.tab-content');
+					var off1 = $parent.offset();
+					var w1 = $parent.width();
+			
+					var off2 = $source.offset();
+					var w2 = $source.width();
+			
+					if( parseInt(off2.left) < parseInt(off1.left) + parseInt(w1 / 2) ) return 'right';
+					return 'left';
+				}
+			
+			
+				$('.dialogs,.comments').slimScroll({
+					height: '300px'
+			    });
+				
+				
+				//Android's default browser somehow is confused when tapping on label which will lead to dragging the task
+				//so disable dragging when clicking on label
+				var agent = navigator.userAgent.toLowerCase();
+				if("ontouchstart" in document && /applewebkit/.test(agent) && /android/.test(agent))
+				  $('#tasks').on('touchstart', function(e){
+					var li = $(e.target).closest('#tasks li');
+					if(li.length == 0)return;
+					var label = li.find('label.inline').get(0);
+					if(label == e.target || $.contains(label, e.target)) e.stopImmediatePropagation() ;
+				});
+			
+				$('#tasks').sortable({
+					opacity:0.8,
+					revert:true,
+					forceHelperSize:true,
+					placeholder: 'draggable-placeholder',
+					forcePlaceholderSize:true,
+					tolerance:'pointer',
+					stop: function( event, ui ) {//just for Chrome!!!! so that dropdowns on items don't appear below other items after being moved
+						$(ui.item).css('z-index', 'auto');
+						}
+					});
+				$('#tasks').disableSelection();
+				$('#tasks input:checkbox').removeAttr('checked').on('click', function(){
+					if(this.checked) $(this).closest('li').addClass('selected');
+					else $(this).closest('li').removeClass('selected');
+				});
+			});
+		</script>
+</body>
+</html>
+

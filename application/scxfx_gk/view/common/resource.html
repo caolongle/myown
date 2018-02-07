@@ -1,0 +1,33 @@
+<script type="text/javascript">
+    window.jQuery || document.write("<script src='__PUBLIC__assets/js/jquery-2.0.3.min.js'>"+"<"+"script>");
+</script>
+
+
+<!--[if IE]>
+<script type="text/javascript">
+    window.jQuery || document.write("<script src='__PUBLIC__assets/js/jquery-1.10.2.min.js'>"+"<"+"script>");
+</script>
+<![endif]-->
+
+<!--<script type="text/javascript">
+    if("ontouchend" in document) document.write("<script src='__PUBLIC__assets/js/jquery.mobile.custom.min.js'>"+"<"+"script>");
+</script>-->
+<script src="__PUBLIC__assets/js/bootstrap.min.js"></script>
+<script src="__PUBLIC__assets/js/typeahead-bs2.min.js"></script>
+<!-- ace scripts -->
+
+<script src="__PUBLIC__assets/js/ace-elements.min.js"></script>
+<script src="__PUBLIC__assets/js/ace.min.js"></script>
+<script src="__PUBLIC__assets/js/bootbox.min.js"></script>
+<!--<script src="__PUBLIC__assets/js/jquery.gritter.min.js"></script>-->
+<script src="__PUBLIC__js/toastr.min.js"></script>
+<!-- inline scripts related to this page -->
+<script type="text/javascript">
+    function logout(){
+        bootbox.confirm("确定退出？", function(result) {
+            if(result) {
+                window.location.href = '/login.html';
+            }
+        });
+    }
+</script>

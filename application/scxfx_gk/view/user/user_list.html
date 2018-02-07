@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<include file="../application/scxfx_gk/view/common/header.html" />
+</head>
+<style type="text/css">
+	#sample-table-1>tbody>tr.selected>td {
+		background-color: #dff0d8;
+	}
+	#sample-table-1>tbody>tr>td {
+		text-align: center;
+	}
+	#sample-table-1>tbody>tr.selected:hover>td {
+		background-color: #d0e9c6;
+	}
+	.pagination{
+		margin:0;
+	}
+</style>
+<include file="../application/scxfx_gk/view/common/body.html" />
+<form action="__URL__search/search_user" method="get" onsubmit="return search_before()">
+	<div class="col-xs-10 pull-right">
+		
+		<if condition="$level eq 1">
+			<div class="col-xs-3" style="line-height: 34px;">
+				<b style="float:left">分部</b>
+				<select style="width:65%;float: left;height:34px;margin-left: 15px;" id="team" name="team">
+					<option value="-1">请选择</option>
+					<option value="1">挂靠一部</option>
+					<option value="2">挂靠二部</option>
+				</select>
+			</div>
+		</if>
+
+		<if condition="$level gt 0">
+			<div class="col-xs-3" style="line-height: 34px;">
+				<b style="float:left">小组</b>
+				<select style="width:65%;float: left;height:34px;margin-left: 15px;" id="sub_team" name="sub_team">
+					<option value="-1">请选择</option>
+					<volist name="sub_team" id="val">
+						<option value="<{$val.id}>"><{$val.name}></option>
+					</volist>	
+				</select>
+			</div>
+		</if>
+		
+		<div class="col-xs-3" style="line-height: 34px;">
+			<b style="float:left">性别</b>
+			<select style="width:65%;float: left;height:34px;margin-left: 15px;" class="gender" name="gender">
+				<option value="-1">请选择</option>
+				<option value="0" <if condition="$gender eq 0">selected="selected"</if>>男</option>
+				<option value="1" <if condition="$gender eq 1">selected="selected"</if>>女</option>
+			</select>
+		</div>
+		
+		<div class="col-xs-3">
+			<div class="input-group">
+				<input type="text" class="form-control search-query" placeholder="请输入用户名或电话" name="user_info"/>
+				<span class="input-group-btn">
+					<button type="submit" class="btn btn-info btn-sm">
+						<span class="icon-search icon-on-right bigger-110"></span>
+					</button>
+				</span>
+			</div>
+		</div>
+	</div>
+	<input type="hidden" value="<{$level}>" name="level"/>
+</form>
+
+	<div class="col-xs-12">
+		<!-- PAGE CONTENT BEGINS -->
+		<div class="hr hr-18 dotted hr-double"></div>
+
+		<div class="row">
+			<div class="col-xs-12">
+							<!-- PAGE CONTENT BEGINS -->
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="table-responsive">
+							<table id="sample-table-1" class="table table-striped table-bordered table-hover">
+								<thead>
+									<tr>
+										<th class="center">
+											<label>
+												<input type="checkbox" class="ace" />
+												<span class="lbl"></span>
+											</label>
+										</th>
+										<th>
+											<i class="icon-list bigger-110 hidden-480"></i>
+											编号
+										</th>
+										<th>
+											<i class="icon-leaf bigger-110 hidden-480"></i>
+											工号
+										</th>
+										<th>
+											<i class="icon-user bigger-110 hidden-480"></i>
+											姓名
+										</th>
+										<th>
+											<i class="icon-phone bigger-110 hidden-480"></i>
+											联系电话
+										</th>
+										<th class="hidden-480">
+											<i class="icon-mars bigger-110 hidden-480"><img src="__PUBLIC__img/gender.png"/></i>
+											性别
+										</th>
+										<th>
+											<i class="bigger-110 hidden-480"><img src="__PUBLIC__img/actor.png"/></i>
+											所在角色
+										</th>
+										<th class="hidden-480">
+											<i class="icon-time bigger-110 hidden-480"></i>
+											创建时间
+										</th>
+										<th style="">
+											<i class="glyphicon glyphicon-log-in bigger-110 hidden-480"></i>
+											最近登陆时间
+										</th>
+										<th class="hidden-480">
+											<i class="glyphicon glyphicon-send bigger-110 hidden-480"></i>
+											登陆IP
+										</th>
+										<th>
+											<i class="icon-gears bigger-110 hidden-480"></i>
+											操作
+										</th>
+									</tr>
+								</thead>
+								<if condition="$count eq 0"><h2 class="pink" style="margin-top:0">没有搜索到相关客户</h2></if>
+								<tbody>
+									<volist name="user" id="val">
+										<tr>
+
+											<td class="center">
+												<label>
+													<input type="checkbox" class="ace" value="<{$val.id}>"/>
+													<span class="lbl"></span>
+												</label>
+											</td>
+											<td><{$val.lead_number}></td>
+											<td><{$val.number}></td>
+
+											<td><{$val.name}></td>
+
+											<td>
+												<span class="label label-primary arrowed-right"><{$val.tel}></span>
+											</td>
+
+											<td class="hidden-480"><if condition="$val.gender eq 0">男<else/>女</if></td>
+
+											<td>
+												<span class="label label-warning arrowed-in arrowed-in-right"><{$val.r_name}></span>
+											</td>
+
+											<td class="hidden-480"><{$val.create_time|date='Y-m-d',###}></td>
+
+											<td>
+												<span class="label label-success arrowed"><if condition="$val.last_time eq 0">新用户，未登录<else/><{$val.last_time|date='Y-m-d H:i:s',###}></if></span>
+											</td>
+											<td class="hidden-480"><if condition="$val.last_ip eq null">新用户，未登录<else/><{$val.last_ip}></if></td>
+											<td>
+											
+
+												<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">												
+														<a class="green iframe" value="__URL__user/edit_user/id/<{$val.id}>" style="cursor: pointer" cate="1">
+															<i class="icon-pencil bigger-130"></i>
+															编辑
+														</a>
+														&nbsp;
+	
+														<a class="red del" style="cursor: pointer" onclick="del(<{$val.id}>)">
+															<i class="icon-trash bigger-130"></i>
+															离职
+														</a>
+												</div>
+
+												<div class="visible-xs visible-sm hidden-md hidden-lg">
+													<div class="inline position-relative">
+														<button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown">
+															<i class="icon-cog icon-only bigger-110"></i>
+														</button>
+
+														<ul class="dropdown-menu dropdown-only-icon dropdown-yellow pull-right dropdown-caret dropdown-close">
+
+															<li>
+																<a class="tooltip-success iframe" data-rel="tooltip" title="编辑" value="__URL__user/edit_user/id/<{$val.id}>" cate="1">
+																	<span class="green">
+																		<i class="icon-edit bigger-120"></i>
+																	</span>
+																</a>
+															</li>
+
+															<li>
+																<a class="tooltip-error del" data-rel="tooltip" title="离职" onclick="del(<{$val.id}>)">
+																	<span class="red">
+																		<i class="icon-trash bigger-120"></i>
+																	</span>
+																</a>
+															</li>
+
+														</ul>
+													</div>
+												</div>
+											
+
+											</td>
+										</tr>
+									</volist>
+								</tbody>
+							</table>
+						</div><!-- /.table-responsive -->
+					</div><!-- /span -->
+
+					<div class="col-xs-11" style="position: relative">
+
+						<div style="float: left">
+							<button class="btn btn-sm btn-pink iframe" value="__URL__user/add_user" cate="2">
+								<i class="icon-plus align-top bigger-125"></i>
+								新增
+							</button>
+							<!--<button class="btn btn-sm btn-purple quit">-->
+								<!--<i class="icon-remove align-top bigger-125"></i>-->
+								<!--离职-->
+							<!--</button>-->
+							<a onclick="window.location.reload();">
+								<button class="btn btn-sm btn-success">
+									<i class="icon-refresh align-top bigger-125"></i>
+									刷新
+								</button>
+							</a>
+						</div>
+						<div class="pagination" style="float: right;margin:0">
+							<{$page}>
+						</div>
+
+					</div>
+				</div><!-- /row -->
+
+				<div class="hr hr-18 dotted hr-double"></div>
+
+			</div><!-- /.col -->
+			</div>
+			</div><!-- /.col -->
+			</div><!-- /.row -->
+
+		</div><!-- /.page-content -->
+	</div><!-- /.main-content -->
+
+</div><!-- /.main-container-inner -->
+
+<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
+	<i class="icon-double-angle-up icon-only bigger-110"></i>
+</a>
+
+</div><!-- /.main-container -->
+	<!-- basic scripts -->
+
+<include file="../application/scxfx_gk/view/common/resource.html" />
+	<!-- page specific plugin scripts -->
+
+<script src="__PUBLIC__assets/js/jquery.dataTables.min.js"></script>
+<script src="__PUBLIC__assets/js/jquery.dataTables.bootstrap.js"></script>
+<script src="__PUBLIC__js/layer/layer.js"></script>
+
+<script type="text/javascript">
+	jQuery(function($) {
+		$('table th input:checkbox').on('click' , function(){
+			var that = this;
+			$(this).closest('table').find('tr > td:first-child input:checkbox').each(function(){
+				this.checked = that.checked;
+				if(this.checked){
+					$(this).closest('tr').addClass('selected');
+				}else{
+					$(this).closest('tr').removeClass('selected');
+				}
+			});
+		});
+
+		$('#sample-table-1 tbody tr input:checkbox').on('click',function(){
+			if($(this).closest('tr').hasClass('selected')){
+				$(this).closest('tr').removeClass('selected').find('td:first-child input:checkbox').prop("checked",false);
+			}else{
+				$(this).closest('tr').addClass('selected').find('td:first-child input:checkbox').prop("checked",true);
+			}
+		});
+
+
+		$('[data-rel="tooltip"]').tooltip({placement: tooltip_placement});
+
+		function tooltip_placement(context, source) {
+			var $source = $(source);
+			var $parent = $source.closest('table');
+			var off1 = $parent.offset();
+			var w1 = $parent.width();
+
+			var off2 = $source.offset();
+			var w2 = $source.width();
+
+			if( parseInt(off2.left) < parseInt(off1.left) + parseInt(w1 / 2) ) return 'right';
+			return 'left';
+		}
+
+		$('.iframe').click(function(){
+            var type = $(this).attr('cate');
+            var url = '';
+            var title = '';
+            if(type == 1){
+                url = $(this).attr('value');
+                title = '编辑用户';
+            }else{
+                url = $(this).val();
+                title = '新增用户';
+            }
+			$('.bg_div').show();
+			layer.open({
+				title: title,
+				type: 2,
+				area: ['65%', '85%'],
+				fix: true, //固定
+				maxmin: false,
+//				scrollbar: false,
+//				move: false,
+				shade: 0,
+				content: url,
+				end: function(){
+					$('.bg_div').hide();
+				}
+			});
+		});
+
+		$('#team').change(function(){
+			var team = $(this).val();
+			if(team != -1){
+				$('#sub_team').empty();
+				var str = '';
+				$.post('__URL__user/get_sub_team',{team:team},function(data){
+					if(data.state == 1){
+						str += '<option value="-1">请选择</option>';
+						for(var i = 0;i < data.info.length; i ++){
+							str += '<option value="'+data.info[i].id+'">'+data.info[i].name+'</option>'
+						}
+						$('#sub_team').append(str);
+					}
+				})
+			}
+		})
+		
+        $('.quit').click(function(){
+            var idArr = [];
+            $('#sample-table-1').find('tr > td:first-child input:checkbox').each(function(){
+                if($(this).prop('checked')){
+                    idArr.push($(this).val());
+                }
+            });
+            if(idArr != ''){
+                layer.confirm('你确定对所选对象进行离职操作?', {icon: 3, title:'离职'}, function(){
+                    $.post('__URL__user/user_quit_batch',{idArr:idArr},function(data){
+                        if(data.state == 1){
+                            layer.msg(data.info, {
+                                icon: 1,
+                                time: 3000, //2秒关闭（如果不配置，默认是3秒）
+                                anim: 4
+                            });
+                            setTimeout(function(){
+                                window.location.reload();
+                            },500);
+                        }else{
+                            layer.msg(data.info, {
+                                icon: 2,
+                                time: 3000, //2秒关闭（如果不配置，默认是3秒）
+                                anim: 6
+                            });
+                            setTimeout(function(){
+                                window.location.reload();
+                            },500);
+                        }
+                    });
+                });
+            }
+        });
+	});
+    function del(id){
+        layer.confirm('确定该员工已离职?', {icon: 3, title:'删除'}, function(){
+            $.post('__URL__user/user_quit',{id:id},function(data){
+                if(data.state == 1){
+					layer.msg(data.info, {
+                        icon: 1,
+                        time: 2000, //2秒关闭（如果不配置，默认是3秒）
+                        anim: 4
+                    });
+                    setTimeout(function(){
+                        window.location.reload();
+                    },500);
+                }else{
+					layer.msg(data.info, {
+						icon: 2,
+						time: 2000, //2秒关闭（如果不配置，默认是3秒）
+						anim: 6
+					});
+					setTimeout(function(){
+						window.location.reload();
+					},500);
+                }
+            });
+        });
+    }
+    
+    function search_before() {
+        var gender = $('.gender').val();
+        var team = $('#team').val();
+		var sub_team = $('#sub_team').val();
+        var level = '<{$level}>';
+        var user_info = $.trim($('input[name=user_info]').val());
+        if(level == 1){//运营总监
+        	if(gender == -1 && team == -1 && sub_team == -1 && user_info == "" ){
+        		window.location.href = '/yuangong';
+            	return false;
+        	}
+        }else if(level == 2){//销售总监
+			if(gender == -1 && sub_team == -1 && user_info == "" ){
+        		window.location.href = '/yuangong';
+            	return false;
+        	}
+		}else{//团队经理
+        	if(gender == -1 && user_info == ""){
+	            window.location.href = '/yuangong';
+	            return false;
+			}
+        }
+    }
+</script>
+</body>
+</html>
